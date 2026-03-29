@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GTA Islamic Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --gold: #e8a020;
+      --gold-light: #f5c842;
+      --gold-dim: rgba(232, 160, 32, 0.18);
+      --navy-deep: #060c1a;
+      --navy-mid: #0d1630;
+      --navy-card: rgba(8, 14, 32, 0.90);
+      --navy-card2: rgba(14, 24, 52, 0.90);
+      --text-bright: #f0e6c8;
+      --text-muted: #7a8daa;
+      --text-mid: #b8c8d8;
+      --ruby: #c0392b;
+      --emerald: #1a6645;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Lato', sans-serif;
+      color: #fff;
+    }
+
+    /* ── BACKGROUND ── */
+    body {
+      background: var(--navy-deep);
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 90% 55% at 50% 0%, #0f1e50 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 85% 5%, #1c0e38 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 10% 90%, #0a1a2e 0%, transparent 60%),
+        linear-gradient(180deg, #050b18 0%, #090f22 50%, #060c18 100%);
+      z-index: 0;
+    }
+
+    /* Subtle noise texture */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .geo-pattern {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%23e8a020' fill-rule='evenodd'%3E%3Cpolygon points='50,4 60,34 92,34 67,52 76,82 50,64 24,82 33,52 8,34 40,34'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 70px 70px;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.15;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: 0.9;
+        transform: scale(1.5)
+      }
+    }
+
+    /* Top/bottom gold lines */
+    .ornament-top,
+    .ornament-bottom {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 3px;
+      z-index: 10;
+      background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
+      box-shadow: 0 0 14px rgba(245, 200, 66, 0.7);
+    }
+
+    .ornament-top {
+      top: 0;
+    }
+
+    .ornament-bottom {
+      bottom: 0;
+    }
+
+    /* Crescent */
+    .crescent {
+      position: fixed;
+      top: 1.2vh;
+      right: 5.5vw;
+      z-index: 3;
+      pointer-events: none;
+      animation: moonGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes moonGlow {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 8px #f5c842) drop-shadow(0 0 22px rgba(245, 200, 66, 0.5))
+      }
+
+      50% {
+        filter: drop-shadow(0 0 16px #f5c842) drop-shadow(0 0 44px rgba(245, 200, 66, 0.7))
+      }
+    }
+
+    /* Lanterns */
+    .lantern-wrap {
+      position: fixed;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .lantern-wrap.left {
+      left: 0.8vw;
+      top: 7vh;
+      animation: floatL 6s ease-in-out infinite;
+    }
+
+    .lantern-wrap.right {
+      right: 0.8vw;
+      top: 7vh;
+      animation: floatL 6s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes floatL {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg)
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(3deg)
+      }
+    }
+
+    /* Mosque silhouette */
+    .mosque-layer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── DASHBOARD GRID ── */
+    body>.dashboard {
+      position: relative;
+      z-index: 5;
+    }
+
+    .dashboard {
+      width: 100%;
+      height: 100%;
+      padding: 1vh 1vw;
+      display: grid;
+      grid-template-rows: 9% 1fr;
+      gap: 1vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, rgba(10, 16, 36, 0.95) 0%, rgba(18, 30, 66, 0.95) 100%);
+      border: 1px solid rgba(232, 160, 32, 0.38);
+      border-radius: 1vh;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5vw;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 24px rgba(232, 160, 32, 0.12), inset 0 1px 0 rgba(232, 160, 32, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before,
+    .header::after {
+      content: '❁';
+      position: absolute;
+      font-size: 2.2vw;
+      color: rgba(232, 160, 32, 0.22);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .header::before {
+      left: 0.6vw
+    }
+
+    .header::after {
+      right: 0.6vw
+    }
+
+    .brand {
+      font-family: 'Cinzel', serif;
+      font-size: 1.9vw;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 18px rgba(232, 160, 32, 0.7), 0 0 36px rgba(232, 160, 32, 0.3);
+      text-align: left;
+    }
+
+    /* World clock strip - in card */
+    .world-clock-strip {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      margin-top: 0.5vh;
+    }
+
+    .wc-city {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .wc-city::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 10%;
+      height: 80%;
+      width: 1px;
+      background: rgba(232, 160, 32, 0.2);
+    }
+
+    .wc-city:last-child::after {
+      display: none;
+    }
+
+    .wc-label {
+      font-size: 0.75vw;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 0.3vh;
+    }
+
+    .wc-time {
+      font-family: 'Cinzel', serif;
+      font-size: 1.45vw;
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .wc-date {
+      font-size: 0.75vw;
+      color: var(--text-muted);
+      margin-top: 0.2vh;
+    }
+
+    .datetime {
+      text-align: right;
+    }
+
+    .greg-date {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25vw;
+      font-weight: 700;
+      color: #fde68a;
+    }
+
+    .hijri-date {
+      font-size: 0.95vw;
+      color: var(--text-muted);
+    }
+
+    /* ── MAIN GRID ── */
+    .main {
+      display: grid;
+      grid-template-columns: 26% 46% 26%;
+      grid-template-rows: 15% 40% 45%;
+      gap: 1vh 0.8vw;
+      min-height: 0;
+    }
+
+    /* ── CARD BASE ── */
+    .card {
+      background: linear-gradient(145deg, var(--navy-card) 0%, var(--navy-card2) 100%);
+      border: 1px solid rgba(232, 160, 32, 0.22);
+      border-radius: 1vh;
+      padding: 1.2vh 1vw;
+      overflow: hidden;
+      position: relative;
+      min-height: 0;
+      backdrop-filter: blur(14px);
+      box-shadow:
+        0 6px 30px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(232, 160, 32, 0.12),
+        0 0 0 0.5px rgba(232, 160, 32, 0.08);
+    }
+
+    /* Corner filigree */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 36px;
+      height: 36px;
+      border-top: 2px solid rgba(232, 160, 32, 0.45);
+      border-left: 2px solid rgba(232, 160, 32, 0.45);
+      border-radius: 1vh 0 0 0;
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      border-bottom: 2px solid rgba(232, 160, 32, 0.45);
+      border-right: 2px solid rgba(232, 160, 32, 0.45);
+      border-radius: 0 0 1vh 0;
+      pointer-events: none;
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2vw;
+      font-weight: 700;
+      color: var(--gold);
+      text-align: center;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 10px rgba(232, 160, 32, 0.5);
+      padding-bottom: 0.6vh;
+      margin-bottom: 0.8vh;
+      border-bottom: 1px solid rgba(232, 160, 32, 0.18);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* card-pattern background layer */
+    .card-pattern {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: inherit;
+      z-index: 0;
+      opacity: 0.07;
+    }
+
+    .card>*:not(.card-pattern) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── PRAYER CARD ── */
+    .next-prayer-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8vw;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
+    }
+
+    .next-prayer-sub {
+      font-size: 0.75vw;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 0.3vh;
+      letter-spacing: 0.05em;
+    }
+
+    .countdown {
+      font-family: 'Cinzel', serif;
+      font-size: 2.4vw;
+      font-weight: 900;
+      color: var(--gold);
+      text-align: center;
+      margin: 0.4vh 0 0.8vh;
+      animation: pulse 2s ease-in-out infinite;
+      letter-spacing: 0.06em;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        text-shadow: 0 0 18px rgba(232, 160, 32, 0.9), 0 0 36px rgba(232, 160, 32, 0.4)
+      }
+
+      50% {
+        text-shadow: 0 0 28px rgba(232, 160, 32, 1), 0 0 56px rgba(232, 160, 32, 0.7), 0 0 80px rgba(232, 160, 32, 0.25)
+      }
+    }
+
+    .prayer-list {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.4vh 0.5vw;
+      font-size: 1.05vw;
+    }
+
+    .prayer-list .label {
+      color: var(--text-muted);
+    }
+
+    .prayer-list .time {
+      font-weight: 700;
+      color: #fde68a;
+    }
+
+    .prayer-list .current-prayer {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .prayer-list .current-time {
+      color: var(--gold);
+      font-weight: 900;
+    }
+
+    .small-note {
+      margin-top: 0.8vh;
+      font-size: 0.85vw;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ── QURAN / HADITH ── */
+    .quote-wrap {
+      height: calc(100% - 3vh);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding: 0.3vw;
+    }
+
+    .arabic {
+      font-size: 1.6vw;
+      direction: rtl;
+      line-height: 1.7;
+      margin-bottom: 0.8vh;
+      color: #fde68a;
+      text-shadow: 0 0 14px rgba(253, 230, 138, 0.35);
+      transition: opacity 0.8s;
+    }
+
+    .quote-text {
+      font-size: 1.15vw;
+      line-height: 1.45;
+      color: var(--text-bright);
+      margin-bottom: 0.6vh;
+      font-style: italic;
+      transition: opacity 0.8s;
+    }
+
+    .quote-ref {
+      font-size: 0.85vw;
+      color: var(--gold);
+      letter-spacing: 0.03em;
+    }
+
+    .hadith-text {
+      font-size: 1.15vw;
+      line-height: 1.45;
+      color: var(--text-bright);
+      text-align: center;
+      margin-bottom: 0.6vh;
+      font-style: italic;
+    }
+
+    .hadith-ref {
+      font-size: 0.85vw;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    /* fade transition */
+    .fade-out {
+      opacity: 0;
+    }
+
+    .fade-in {
+      opacity: 1;
+    }
+
+    .arabic,
+    .quote-text,
+    .quote-ref,
+    .hadith-text,
+    .hadith-ref,
+    .reminder-text,
+    #reminderRef {
+      transition: opacity 0.7s;
+    }
+
+    /* ── EVENTS ── */
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6vh;
+      height: calc(100% - 2.5vh);
+      overflow: hidden;
+    }
+
+    .event-item {
+      display: grid;
+      grid-template-columns: 22% 1fr;
+      border: 1px solid rgba(232, 160, 32, 0.14);
+      border-radius: 0.6vh;
+      overflow: hidden;
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .event-date {
+      background: linear-gradient(135deg, #8b4500, var(--gold));
+      color: #0a0f1e;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0.4vh 0.2vw;
+    }
+
+    .event-month {
+      font-size: 0.68vw;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .event-day {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5vw;
+      line-height: 1.1;
+      margin-top: 0.15vh;
+    }
+
+    .event-body {
+      padding: 0.6vh 0.7vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .event-title {
+      font-size: 0.95vw;
+      font-weight: 700;
+      color: #fde68a;
+      margin-bottom: 0.15vh;
+    }
+
+    .event-desc {
+      font-size: 0.75vw;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* ── REMINDER + TICKER ── */
+    .reminder-text {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6vw;
+      line-height: 1.6;
+      color: var(--text-bright);
+      text-align: center;
+      margin-bottom: 0.8vh;
+      letter-spacing: 0.025em;
+      text-shadow: 0 0 18px rgba(255, 255, 255, 0.12);
+    }
+
+    /* ── TICKER ── */
+    .footer {
+      position: absolute;
+      left: 1vw;
+      right: 1vw;
+      bottom: 1vh;
+      height: 4.5vh;
+      background: linear-gradient(90deg, rgba(6, 10, 22, 0.96), rgba(14, 22, 50, 0.96), rgba(6, 10, 22, 0.96));
+      border: 1px solid rgba(232, 160, 32, 0.28);
+      border-radius: 0.7vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 1vw;
+      box-shadow: 0 0 12px rgba(232, 160, 32, 0.09);
+    }
+
+    .footer::before {
+      content: '☪';
+      margin-right: 0.8vw;
+      color: var(--gold);
+      font-size: 1.1vw;
+      flex-shrink: 0;
+      text-shadow: 0 0 8px var(--gold);
+    }
+
+    .ticker {
+      white-space: nowrap;
+      display: inline-block;
+      padding-left: 100%;
+      animation: ticker 34s linear infinite;
+      font-size: 1vw;
+      color: var(--text-mid);
+      letter-spacing: 0.03em;
+    }
+
+    @keyframes ticker {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-100%)
+      }
+    }
+
+    /* ── LANGUAGE BADGE ── */
+    .lang-badge {
+      position: absolute;
+      top: 0.7vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.7vw;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      text-transform: uppercase;
+      opacity: 0.6;
+      background: rgba(232, 160, 32, 0.08);
+      border: 1px solid rgba(232, 160, 32, 0.15);
+      padding: 0.15vh 0.5vw;
+      border-radius: 3px;
+      transition: opacity 0.5s;
+    }
+
+    .lang-badge.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="ornament-top"></div>
+  <div class="ornament-bottom"></div>
+  <div class="geo-pattern"></div>
+  <div class="stars" id="starsLayer"></div>
+
+  <!-- Crescent -->
+  <div class="crescent">
+    <svg width="62" height="62" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="moonGrad" cx="38%" cy="38%">
+          <stop offset="0%" stop-color="#fef08a" />
+          <stop offset="100%" stop-color="#d97706" />
+        </radialGradient>
+      </defs>
+      <circle cx="35" cy="35" r="28" fill="url(#moonGrad)" />
+      <circle cx="46" cy="28" r="22" fill="#060c1a" />
+      <polygon points="58,12 60,18 66,18 61,22 63,28 58,24 53,28 55,22 50,18 56,18" fill="#fef08a" opacity="0.9" />
+    </svg>
+  </div>
+
+  <!-- Lanterns -->
+  <div class="lantern-wrap left">
+    <svg width="26" height="44" viewBox="0 0 28 48" xmlns="http://www.w3.org/2000/svg">
+      <line x1="14" y1="0" x2="14" y2="6" stroke="#e8a020" stroke-width="1.5" />
+      <rect x="6" y="6" width="16" height="3" rx="1.5" fill="#b45309" />
+      <rect x="4" y="9" width="20" height="28" rx="4" fill="none" stroke="#e8a020" stroke-width="1.5" />
+      <rect x="6" y="9" width="16" height="28" rx="3" fill="rgba(232,160,32,0.12)" />
+      <line x1="9" y1="13" x2="9" y2="33" stroke="rgba(245,200,66,0.4)" stroke-width="1" />
+      <line x1="14" y1="13" x2="14" y2="33" stroke="rgba(245,200,66,0.4)" stroke-width="1" />
+      <line x1="19" y1="13" x2="19" y2="33" stroke="rgba(245,200,66,0.4)" stroke-width="1" />
+      <rect x="6" y="37" width="16" height="3" rx="1.5" fill="#b45309" />
+      <line x1="14" y1="40" x2="14" y2="48" stroke="#e8a020" stroke-width="1.5" />
+      <ellipse cx="14" cy="23" rx="6" ry="8" fill="rgba(245,200,66,0.1)" />
+    </svg>
+  </div>
+  <div class="lantern-wrap right">
+    <svg width="26" height="44" viewBox="0 0 28 48" xmlns="http://www.w3.org/2000/svg">
+      <line x1="14" y1="0" x2="14" y2="6" stroke="#e8a020" stroke-width="1.5" />
+      <rect x="6" y="6" width="16" height="3" rx="1.5" fill="#b45309" />
+      <rect x="4" y="9" width="20" height="28" rx="4" fill="none" stroke="#e8a020" stroke-width="1.5" />
+      <rect x="6" y="9" width="16" height="28" rx="3" fill="rgba(232,160,32,0.12)" />
+      <line x1="9" y1="13" x2="9" y2="33" stroke="rgba(245,200,66,0.4)" stroke-width="1" />
+      <line x1="14" y1="13" x2="14" y2="33" stroke="rgba(245,200,66,0.4)" stroke-width="1" />
+      <line x1="19" y1="13" x2="19" y2="33" stroke="rgba(245,200,66,0.4)" stroke-width="1" />
+      <rect x="6" y="37" width="16" height="3" rx="1.5" fill="#b45309" />
+      <line x1="14" y1="40" x2="14" y2="48" stroke="#e8a020" stroke-width="1.5" />
+      <ellipse cx="14" cy="23" rx="6" ry="8" fill="rgba(245,200,66,0.1)" />
+    </svg>
+  </div>
+
+  <!-- Mosque -->
+  <div class="mosque-layer">
+    <svg viewBox="0 0 1920 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice"
+      style="width:100%;display:block;opacity:0.16;">
+      <rect x="0" y="240" width="1920" height="40" fill="#1a2e5e" />
+      <rect x="700" y="120" width="520" height="125" fill="#162550" />
+      <ellipse cx="960" cy="120" rx="130" ry="60" fill="#162550" />
+      <circle cx="960" cy="70" r="16" fill="#162550" />
+      <circle cx="968" cy="64" r="13" fill="#050b18" />
+      <line x1="960" y1="54" x2="960" y2="40" stroke="#162550" stroke-width="3" />
+      <polygon points="960,35 963,45 970,45 964,51 966,58 960,54 954,58 956,51 950,45 957,45" fill="#162550" />
+      <rect x="640" y="80" width="40" height="165" fill="#12204e" />
+      <ellipse cx="660" cy="80" rx="22" ry="14" fill="#12204e" />
+      <ellipse cx="660" cy="70" rx="12" ry="8" fill="#12204e" />
+      <rect x="630" y="155" width="60" height="6" fill="#1a2e5e" />
+      <rect x="1240" y="80" width="40" height="165" fill="#12204e" />
+      <ellipse cx="1260" cy="80" rx="22" ry="14" fill="#12204e" />
+      <ellipse cx="1260" cy="70" rx="12" ry="8" fill="#12204e" />
+      <rect x="1230" y="155" width="60" height="6" fill="#1a2e5e" />
+      <rect x="780" y="160" width="110" height="85" fill="#102048" />
+      <ellipse cx="835" cy="160" rx="58" ry="30" fill="#102048" />
+      <rect x="1030" y="160" width="110" height="85" fill="#102048" />
+      <ellipse cx="1085" cy="160" rx="58" ry="30" fill="#102048" />
+      <ellipse cx="860" cy="180" rx="20" ry="28" fill="#1a2e5e" />
+      <ellipse cx="960" cy="175" rx="22" ry="30" fill="#1a2e5e" />
+      <ellipse cx="1060" cy="180" rx="20" ry="28" fill="#1a2e5e" />
+      <rect x="0" y="190" width="200" height="55" fill="#0c1836" />
+      <rect x="50" y="170" width="80" height="75" fill="#0c1836" />
+      <ellipse cx="90" cy="170" rx="25" ry="12" fill="#0c1836" />
+      <rect x="200" y="195" width="140" height="50" fill="#0e1c3a" />
+      <rect x="1520" y="190" width="200" height="55" fill="#0c1836" />
+      <rect x="1560" y="170" width="80" height="75" fill="#0c1836" />
+      <ellipse cx="1600" cy="170" rx="25" ry="12" fill="#0c1836" />
+      <ellipse cx="960" cy="242" rx="300" ry="10" fill="#e8a020" opacity="0.05" />
+    </svg>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="brand">✦ GTA Islamic Dashboard ✦</div>
+
+      <div class="datetime">
+        <div class="greg-date" id="gregDate">Loading...</div>
+        <div class="hijri-date" id="hijriDate">—</div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- ⓪ World Time Zones -->
+      <div class="card"
+        style="grid-column:1 / span 3;grid-row:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="card-pattern">
+          <svg width="100%" height="100%" viewBox="0 0 1000 100" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice">
+            <circle cx="500" cy="50" r="150" fill="none" stroke="#e8a020" stroke-width="1" opacity="0.3" />
+            <line x1="0" y1="50" x2="1000" y2="50" stroke="#e8a020" stroke-width="1" opacity="0.2" />
+          </svg>
+        </div>
+        <div class="card-title" id="worldClockTitle" style="padding-bottom:0.2vh; margin-bottom:0.1vh; border:none;">
+          World Time Zones</div>
+        <!-- World Clock Strip -->
+        <div class="world-clock-strip" id="worldClockStrip">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- ① Next Prayer -->
+      <div class="card" style="grid-column:1;grid-row:2;">
+        <div class="card-pattern">
+          <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice">
+            <circle cx="150" cy="200" r="90" fill="#e8a020" />
+            <circle cx="172" cy="182" r="74" fill="#060c1a" />
+            <circle cx="255" cy="55" r="38" fill="#e8a020" />
+            <circle cx="267" cy="46" r="31" fill="#060c1a" />
+            <circle cx="45" cy="340" r="30" fill="#e8a020" />
+            <circle cx="55" cy="332" r="24" fill="#060c1a" />
+            <polygon points="80,60 83,72 95,72 86,79 89,91 80,84 71,91 74,79 65,72 77,72" fill="#fde68a" />
+            <polygon points="240,150 242,157 249,157 244,161 246,168 240,164 234,168 236,161 231,157 238,157"
+              fill="#fde68a" />
+          </svg>
+        </div>
+        <div class="card-title" id="prayerCardTitle">☪ Next Prayer</div>
+        <div class="next-prayer-name" id="nextPrayer">—</div>
+        <div class="next-prayer-sub" id="nextPrayerSub">loading…</div>
+        <div class="countdown" id="countdown">00:00:00</div>
+        <div class="prayer-list">
+          <div class="label" id="lFajr">Fajr</div>
+          <div class="time" id="fajrTime">--:--</div>
+          <div class="label" id="lDhuhr">Dhuhr</div>
+          <div class="time" id="dhuhrTime">--:--</div>
+          <div class="label" id="lAsr">Asr</div>
+          <div class="time" id="asrTime">--:--</div>
+          <div class="label" id="lMaghrib">Maghrib</div>
+          <div class="time" id="maghribTime">--:--</div>
+          <div class="label" id="lIsha">Isha</div>
+          <div class="time" id="ishaTime">--:--</div>
+        </div>
+        <div class="small-note">📍 Petaling Jaya, Malaysia</div>
+      </div>
+
+      <!-- ② Quran Verse -->
+      <div class="card" style="grid-column:2;grid-row:2;">
+        <div class="card-pattern">
+          <svg width="100%" height="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="islamicStar" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <g transform="translate(40,40)">
+                  <polygon points="0,-28 8,-8 28,0 8,8 0,28 -8,8 -28,0 -8,-8" fill="none" stroke="#e8a020"
+                    stroke-width="1.2" />
+                  <polygon points="0,-28 8,-8 28,0 8,8 0,28 -8,8 -28,0 -8,-8" fill="none" stroke="#e8a020"
+                    stroke-width="1.2" transform="rotate(45)" />
+                  <circle cx="0" cy="0" r="6" fill="none" stroke="#fde68a" stroke-width="0.8" />
+                </g>
+              </pattern>
+            </defs>
+            <rect width="400" height="300" fill="url(#islamicStar)" />
+            <g transform="translate(200,150)" opacity="0.55">
+              <polygon points="0,-60 16,-16 60,0 16,16 0,60 -16,16 -60,0 -16,-16" fill="none" stroke="#e8a020"
+                stroke-width="1.5" />
+              <polygon points="0,-60 16,-16 60,0 16,16 0,60 -16,16 -60,0 -16,-16" fill="none" stroke="#fde68a"
+                stroke-width="1" transform="rotate(30)" />
+            </g>
+          </svg>
+        </div>
+        <div class="card-title" id="quranCardTitle">✦ Qur'an Verse</div>
+        <div class="quote-wrap">
+          <div class="arabic" id="quranArabic"></div>
+          <div class="quote-text" id="quranMeaning"></div>
+          <div class="quote-ref" id="quranRef"></div>
+        </div>
+        <div class="lang-badge" id="langBadge">EN</div>
+      </div>
+
+      <!-- ③ Hadith -->
+      <div class="card" style="grid-column:3;grid-row:2;">
+        <div class="card-pattern">
+          <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice">
+            <rect x="70" y="160" width="160" height="180" fill="none" stroke="#e8a020" stroke-width="2" />
+            <path d="M70,160 Q150,60 230,160" fill="none" stroke="#e8a020" stroke-width="2" />
+            <rect x="88" y="172" width="124" height="168" fill="none" stroke="#fde68a" stroke-width="1" />
+            <path d="M88,172 Q150,88 212,172" fill="none" stroke="#fde68a" stroke-width="1" />
+            <polygon points="150,72 156,90 174,90 160,100 166,118 150,108 134,118 140,100 126,90 144,90" fill="#e8a020"
+              opacity="0.8" />
+            <rect x="56" y="160" width="14" height="185" fill="none" stroke="#e8a020" stroke-width="1" />
+            <rect x="230" y="160" width="14" height="185" fill="none" stroke="#e8a020" stroke-width="1" />
+          </svg>
+        </div>
+        <div class="card-title" id="hadithCardTitle">✦ Hadith</div>
+        <div class="quote-wrap">
+          <div class="hadith-text" id="hadithText"></div>
+          <div class="hadith-ref" id="hadithRef"></div>
+        </div>
+      </div>
+
+      <!-- ④ Islamic Dates -->
+      <div class="card" style="grid-column:1;grid-row:3;">
+        <div class="card-pattern">
+          <svg width="100%" height="100%" viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice">
+            <g transform="translate(60,30)">
+              <line x1="0" y1="0" x2="0" y2="20" stroke="#e8a020" stroke-width="2" />
+              <rect x="-18" y="20" width="36" height="5" rx="2" fill="#e8a020" />
+              <rect x="-22" y="25" width="44" height="65" rx="8" fill="none" stroke="#e8a020" stroke-width="2" />
+              <line x1="-10" y1="29" x2="-10" y2="86" stroke="#fde68a" stroke-width="1" opacity="0.55" />
+              <line x1="0" y1="29" x2="0" y2="86" stroke="#fde68a" stroke-width="1" opacity="0.55" />
+              <line x1="10" y1="29" x2="10" y2="86" stroke="#fde68a" stroke-width="1" opacity="0.55" />
+              <rect x="-18" y="90" width="36" height="5" rx="2" fill="#e8a020" />
+            </g>
+            <g transform="translate(150,60)">
+              <line x1="0" y1="0" x2="0" y2="20" stroke="#e8a020" stroke-width="1.5" />
+              <rect x="-14" y="20" width="28" height="4" rx="2" fill="#e8a020" />
+              <rect x="-17" y="24" width="34" height="52" rx="6" fill="none" stroke="#e8a020" stroke-width="1.5" />
+              <line x1="-7" y1="27" x2="-7" y2="72" stroke="#fde68a" stroke-width="1" opacity="0.4" />
+              <line x1="0" y1="27" x2="0" y2="72" stroke="#fde68a" stroke-width="1" opacity="0.4" />
+              <line x1="7" y1="27" x2="7" y2="72" stroke="#fde68a" stroke-width="1" opacity="0.4" />
+              <rect x="-14" y="76" width="28" height="4" rx="2" fill="#e8a020" />
+            </g>
+            <g transform="translate(240,20)">
+              <line x1="0" y1="0" x2="0" y2="20" stroke="#e8a020" stroke-width="2" />
+              <rect x="-18" y="20" width="36" height="5" rx="2" fill="#e8a020" />
+              <rect x="-22" y="25" width="44" height="65" rx="8" fill="none" stroke="#e8a020" stroke-width="2" />
+              <line x1="-10" y1="29" x2="-10" y2="86" stroke="#fde68a" stroke-width="1" opacity="0.55" />
+              <line x1="0" y1="29" x2="0" y2="86" stroke="#fde68a" stroke-width="1" opacity="0.55" />
+              <line x1="10" y1="29" x2="10" y2="86" stroke="#fde68a" stroke-width="1" opacity="0.55" />
+              <rect x="-18" y="90" width="36" height="5" rx="2" fill="#e8a020" />
+            </g>
+            <path d="M0,0 Q50,25 60,18 Q110,40 150,30 Q190,45 240,20 Q270,12 300,18" fill="none" stroke="#e8a020"
+              stroke-width="1.2" opacity="0.3" />
+          </svg>
+        </div>
+        <div class="card-title" id="eventsCardTitle">☪ Islamic Dates</div>
+        <div class="events-list" id="eventsList"></div>
+      </div>
+
+      <!-- ⑤ Reminder + Ticker -->
+      <div class="card" style="grid-column:2 / span 2;grid-row:3;padding-bottom:6.5vh;">
+        <div class="card-pattern">
+          <svg width="100%" height="100%" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice">
+            <rect x="260" y="130" width="180" height="150" fill="#e8a020" />
+            <ellipse cx="350" cy="130" rx="90" ry="45" fill="#e8a020" />
+            <circle cx="350" cy="92" r="14" fill="#e8a020" />
+            <circle cx="357" cy="87" r="11" fill="#060c1a" />
+            <rect x="220" y="100" width="26" height="185" fill="#e8a020" />
+            <ellipse cx="233" cy="100" rx="15" ry="9" fill="#e8a020" />
+            <rect x="454" y="100" width="26" height="185" fill="#e8a020" />
+            <ellipse cx="467" cy="100" rx="15" ry="9" fill="#e8a020" />
+            <g fill="#e8a020">
+              <polygon points="80,50 83,62 95,62 86,68 89,80 80,74 71,80 74,68 65,62 77,62" />
+              <polygon points="620,50 623,62 635,62 626,68 629,80 620,74 611,80 614,68 605,62 617,62" />
+            </g>
+            <rect x="0" y="0" width="700" height="3" fill="#e8a020" opacity="0.45" />
+          </svg>
+        </div>
+        <div class="card-title" id="reminderCardTitle">✦ Islamic Reminder</div>
+        <div class="quote-wrap">
+          <div class="reminder-text" id="reminderText">—</div>
+          <div class="quote-ref" id="reminderRef">—</div>
+        </div>
+        <div class="footer">
+          <div class="ticker" id="tickerText">Memuatkan waktu solat…</div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /dashboard -->
+
+  <script>
+    /* ── STARS ── */
+    (function () {
+      const layer = document.getElementById('starsLayer');
+      for (let i = 0; i < 130; i++) {
+        const s = document.createElement('div'); s.className = 'star';
+        const sz = Math.random() * 2.5 + 0.4;
+        s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random() * 72}%;left:${Math.random() * 100}%;--dur:${(Math.random() * 4 + 2).toFixed(1)}s;--delay:-${(Math.random() * 5).toFixed(1)}s;opacity:${Math.random() * 0.5 + 0.1};`;
+        layer.appendChild(s);
+      }
+    })();
+
+    /* ── WORLD CLOCK ── */
+    const ZONES = [
+      { label: 'Kuala Lumpur', tz: 'Asia/Kuala_Lumpur', flag: '🇲🇾' },
+      { label: 'Makkah', tz: 'Asia/Riyadh', flag: '🕌' },
+      { label: 'London', tz: 'Europe/London', flag: '🇬🇧' },
+      { label: 'New York', tz: 'America/New_York', flag: '🇺🇸' },
+      { label: 'Ankara', tz: 'Europe/Istanbul', flag: '🇹🇷' },
+      { label: 'Beijing', tz: 'Asia/Shanghai', flag: '🇨🇳' },
+    ];
+
+    function buildWorldClockCells() {
+      const strip = document.getElementById('worldClockStrip');
+      ZONES.forEach(z => {
+        const div = document.createElement('div'); div.className = 'wc-city'; div.id = 'wc_' + z.tz.replace(/\//g, '_');
+        div.innerHTML = `<div class="wc-label">${z.flag} ${z.label}</div><div class="wc-time">--:--:--</div><div class="wc-date">---</div>`;
+        strip.appendChild(div);
+      });
+    }
+
+    function updateWorldClock() {
+      ZONES.forEach(z => {
+        const el = document.getElementById('wc_' + z.tz.replace(/\//g, '_'));
+        if (!el) return;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-MY', { timeZone: z.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        const dateStr = now.toLocaleDateString('en-MY', { timeZone: z.tz, day: '2-digit', month: 'short' });
+        el.querySelector('.wc-time').textContent = timeStr;
+        el.querySelector('.wc-date').textContent = dateStr;
+      });
+    }
+
+    buildWorldClockCells();
+    setInterval(updateWorldClock, 1000);
+    updateWorldClock();
+
+    /* ── BILINGUAL DATA ── */
+    const T = {
+      en: {
+        worldClockTitle: ' World Time Zones',
+        prayerTitle: '☪ Next Prayer',
+        nextPrayerSub: 'Countdown',
+        quranTitle: '✦ Qur\'an Verse',
+        hadithTitle: '✦ Hadith',
+        eventsTitle: '☪ Islamic Dates',
+        reminderTitle: '✦ Islamic Reminder',
+        prayers: { Fajr: 'Fajr', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' },
+        eventMonths: { 'Muharram': 'Muharram', 'Rabi\' I': 'Rabi\' I', 'Rajab': 'Rajab', 'Sha\'ban': 'Sha\'ban', 'Ramadan': 'Ramadan' },
+        quranVerses: [
+          { arabic: 'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا', meaning: 'Indeed, with hardship comes ease. Indeed, with hardship comes ease.', ref: 'Surah Ash-Sharh 94:5–6' },
+          { arabic: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', meaning: 'And say: My Lord, increase me in knowledge.', ref: 'Surah Taha 20:114' },
+          { arabic: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', meaning: 'Indeed, Allah is with the patient.', ref: 'Surah Al-Baqarah 2:153' },
+          { arabic: 'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', meaning: 'Allah does not burden a soul beyond that it can bear.', ref: 'Surah Al-Baqarah 2:286' },
+          { arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ', meaning: 'It may be that you dislike something yet it is good for you.', ref: 'Surah Al-Baqarah 2:216' },
+        ],
+        hadiths: [
+          { text: '"The best among you are those who have the best manners and character."', ref: 'Sahih al-Bukhari' },
+          { text: '"Actions are judged by intentions."', ref: 'Bukhari & Muslim' },
+          { text: '"None of you truly believes until he loves for his brother what he loves for himself."', ref: 'Bukhari & Muslim' },
+          { text: '"Charity does not decrease wealth."', ref: 'Sahih Muslim' },
+          { text: '"Make things easy and do not make them difficult."', ref: 'Bukhari & Muslim' },
+          { text: '"Speak good or remain silent."', ref: 'Bukhari & Muslim' },
+        ],
+        reminders: [
+          { text: 'Keep prayer on time and remember Allah in all matters.', ref: 'Daily Reminder' },
+          { text: 'Speak with wisdom, patience, and good character.', ref: 'Daily Reminder' },
+          { text: 'Protect trusts, fulfill responsibilities, and be sincere in your work.', ref: 'Daily Reminder' },
+          { text: 'Seek beneficial knowledge and act upon it.', ref: 'Daily Reminder' },
+          { text: 'Begin every task with Bismillah and strive for excellence.', ref: 'Daily Reminder' },
+        ],
+        islamicEvents: [
+          { month: 'Muharram', day: '1', title: 'Islamic New Year', desc: '1 Muharram' },
+          { month: 'Muharram', day: '10', title: 'Day of Ashura', desc: '10 Muharram' },
+          { month: 'Rabi\' I', day: '12', title: 'Mawlid al-Nabi', desc: '12 Rabi\' al-Awwal' },
+          { month: 'Rajab', day: '27', title: 'Isra\' & Mi\'raj', desc: '27 Rajab' },
+          { month: 'Sha\'ban', day: '15', title: 'Mid-Sha\'ban', desc: '15 Sha\'ban' },
+          { month: 'Ramadan', day: '1', title: 'Start of Ramadan', desc: '1 Ramadan' },
+        ],
+      },
+      bm: {
+        worldClockTitle: '🌍 Zon Masa Dunia',
+        prayerTitle: '☪ Solat Seterusnya',
+        nextPrayerSub: 'Masa Berbaki',
+        quranTitle: '✦ Ayat Al-Quran',
+        hadithTitle: '✦ Hadith',
+        eventsTitle: '☪ Tarikh Islamik',
+        reminderTitle: '✦ Peringatan Harian',
+        prayers: { Fajr: 'Subuh', Dhuhr: 'Zohor', Asr: 'Asar', Maghrib: 'Maghrib', Isha: 'Isyak' },
+        quranVerses: [
+          { arabic: 'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا', meaning: 'Sesungguhnya bersama kesukaran ada kemudahan. Sesungguhnya bersama kesukaran ada kemudahan.', ref: 'Surah Ash-Sharh 94:5–6' },
+          { arabic: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', meaning: 'Dan katakanlah: Wahai Tuhanku, tambahkanlah ilmu pengetahuanku.', ref: 'Surah Taha 20:114' },
+          { arabic: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', meaning: 'Sesungguhnya Allah bersama orang-orang yang sabar.', ref: 'Surah Al-Baqarah 2:153' },
+          { arabic: 'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', meaning: 'Allah tidak membebankan seseorang melainkan sesuai kemampuannya.', ref: 'Surah Al-Baqarah 2:286' },
+          { arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ', meaning: 'Boleh jadi kamu membenci sesuatu padahal ia amat baik bagimu.', ref: 'Surah Al-Baqarah 2:216' },
+        ],
+        hadiths: [
+          { text: '"Sebaik-baik kamu ialah yang paling baik akhlaknya."', ref: 'Sahih al-Bukhari' },
+          { text: '"Sesungguhnya setiap amalan itu bergantung kepada niat."', ref: 'Bukhari & Muslim' },
+          { text: '"Tidak sempurna iman seseorang sehingga dia mencintai saudaranya seperti dia mencintai dirinya sendiri."', ref: 'Bukhari & Muslim' },
+          { text: '"Sedekah tidak akan mengurangkan harta."', ref: 'Sahih Muslim' },
+          { text: '"Mudahkanlah dan janganlah kamu menyusahkan."', ref: 'Bukhari & Muslim' },
+          { text: '"Berkatalah yang baik atau diam."', ref: 'Bukhari & Muslim' },
+        ],
+        reminders: [
+          { text: 'Jagalah solat tepat pada waktunya dan sentiasa ingati Allah.', ref: 'Peringatan Harian' },
+          { text: 'Bertuturlah dengan hikmah, kesabaran, dan akhlak yang baik.', ref: 'Peringatan Harian' },
+          { text: 'Tunaikanlah amanah dan laksanakan tanggungjawab dengan ikhlas.', ref: 'Peringatan Harian' },
+          { text: 'Tuntutlah ilmu yang bermanfaat dan amalkan dalam kehidupan.', ref: 'Peringatan Harian' },
+          { text: 'Mulakan setiap tugas dengan Bismillah dan berusaha dengan cemerlang.', ref: 'Peringatan Harian' },
+        ],
+        islamicEvents: [
+          { month: 'Muharram', day: '1', title: 'Tahun Baru Islam', desc: '1 Muharram' },
+          { month: 'Muharram', day: '10', title: 'Hari Asyura', desc: '10 Muharram' },
+          { month: 'Rabi\' I', day: '12', title: 'Maulidur Rasul', desc: '12 Rabi\' al-Awwal' },
+          { month: 'Rajab', day: '27', title: 'Isra\' & Mi\'raj', desc: '27 Rejab' },
+          { month: 'Sha\'ban', day: '15', title: 'Nisfu Syaaban', desc: '15 Sya\'ban' },
+          { month: 'Ramadan', day: '1', title: 'Awal Ramadan', desc: '1 Ramadan' },
+        ],
+      }
+    };
+
+    /* ── STATE ── */
+    let lang = 'en';
+    let quranIdx = 0, hadithIdx = 0, reminderIdx = 0;
+    let prayerData = null, lastLoadedDate = null;
+    const pad = n => String(n).padStart(2, '0');
+
+    /* ── LANGUAGE TOGGLE ── */
+    const langBadge = document.getElementById('langBadge');
+    function toggleLang() {
+      lang = lang === 'en' ? 'bm' : 'en';
+      langBadge.textContent = lang.toUpperCase();
+      langBadge.classList.add('visible');
+      setTimeout(() => langBadge.classList.remove('visible'), 1500);
+      applyLang();
+      renderEvents();
+    }
+
+    function applyLang() {
+      const d = T[lang];
+      if (document.getElementById('worldClockTitle')) document.getElementById('worldClockTitle').textContent = d.worldClockTitle;
+      document.getElementById('prayerCardTitle').textContent = d.prayerTitle;
+      document.getElementById('nextPrayerSub').textContent = d.nextPrayerSub;
+      document.getElementById('quranCardTitle').textContent = d.quranTitle;
+      document.getElementById('hadithCardTitle').textContent = d.hadithTitle;
+      document.getElementById('eventsCardTitle').textContent = d.eventsTitle;
+      document.getElementById('reminderCardTitle').textContent = d.reminderTitle;
+      // prayer labels
+      const p = d.prayers;
+      document.getElementById('lFajr').textContent = p.Fajr;
+      document.getElementById('lDhuhr').textContent = p.Dhuhr;
+      document.getElementById('lAsr').textContent = p.Asr;
+      document.getElementById('lMaghrib').textContent = p.Maghrib;
+      document.getElementById('lIsha').textContent = p.Isha;
+    }
+
+    /* ── FADE HELPER ── */
+    function fadeSwap(ids, values) {
+      ids.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('fade-out'); });
+      setTimeout(() => {
+        ids.forEach((id, i) => { const el = document.getElementById(id); if (el) { el.textContent = values[i] || ''; el.classList.remove('fade-out'); } });
+      }, 700);
+    }
+
+    /* ── CONTENT ROTATION ── */
+    function showQuran() {
+      const vs = T[lang].quranVerses;
+      const v = vs[quranIdx % vs.length];
+      fadeSwap(['quranArabic', 'quranMeaning', 'quranRef'], [v.arabic, v.meaning, v.ref]);
+      quranIdx++;
+    }
+    function showHadith() {
+      const hs = T[lang].hadiths;
+      const h = hs[hadithIdx % hs.length];
+      fadeSwap(['hadithText', 'hadithRef'], [h.text, h.ref]);
+      hadithIdx++;
+    }
+    function showReminder() {
+      const rs = T[lang].reminders;
+      const r = rs[reminderIdx % rs.length];
+      fadeSwap(['reminderText', 'reminderRef'], [r.text, r.ref]);
+      reminderIdx++;
+    }
+
+    /* ── EVENTS ── */
+    function renderEvents() {
+      const c = document.getElementById('eventsList'); c.innerHTML = '';
+      T[lang].islamicEvents.forEach(ev => {
+        const item = document.createElement('div'); item.className = 'event-item';
+        item.innerHTML = `
+      <div class="event-date"><div class="event-month">${ev.month}</div><div class="event-day">${ev.day}</div></div>
+      <div class="event-body"><div class="event-title">${ev.title}</div><div class="event-desc">${ev.desc}</div></div>`;
+        c.appendChild(item);
+      });
+    }
+
+    /* ── PRAYER API ── */
+    async function loadPrayerTimes() {
+      try {
+        const now = new Date();
+        const dd = pad(now.getDate()), mm = pad(now.getMonth() + 1), yyyy = now.getFullYear();
+        const key = `${yyyy}-${mm}-${dd}`;
+        const url = `https://api.aladhan.com/v1/timingsByCity/${dd}-${mm}-${yyyy}?city=Petaling%20Jaya&country=Malaysia&method=17`;
+        const res = await fetch(url); const json = await res.json();
+        const t = json.data.timings, h = json.data.date.hijri;
+        prayerData = { fajr: t.Fajr, dhuhr: t.Dhuhr, asr: t.Asr, maghrib: t.Maghrib, isha: t.Isha };
+        lastLoadedDate = key;
+        document.getElementById('fajrTime').textContent = t.Fajr;
+        document.getElementById('dhuhrTime').textContent = t.Dhuhr;
+        document.getElementById('asrTime').textContent = t.Asr;
+        document.getElementById('maghribTime').textContent = t.Maghrib;
+        document.getElementById('ishaTime').textContent = t.Isha;
+        document.getElementById('hijriDate').textContent = `${h.day} ${h.month.en} ${h.year} AH`;
+        updateTicker(t);
+      } catch (e) {
+        document.getElementById('tickerText').textContent = 'Gagal memuatkan waktu solat. Semak sambungan rangkaian.';
+      }
+    }
+
+    function updateTicker(t) {
+      const kl = lang === 'bm';
+      const p = T[lang].prayers;
+      const ticker = `✦ Waktu Solat — Petaling Jaya ✦  ${p.Fajr} ${t.Fajr}  |  ${p.Dhuhr} ${t.Dhuhr}  |  ${p.Asr} ${t.Asr}  |  ${p.Maghrib} ${t.Maghrib}  |  ${p.Isha} ${t.Isha}  ✦  Global Turbine Asia  ✦  بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ  ✦`;
+      document.getElementById('tickerText').textContent = ticker;
+    }
+
+    /* ── COUNTDOWN ── */
+    function parseTimeToDate(base, hhmm) {
+      const [h, m] = hhmm.split(':').map(Number);
+      const d = new Date(base); d.setHours(h, m, 0, 0); return d;
+    }
+    function formatGregorian(d) {
+      return d.toLocaleDateString('en-MY', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      document.getElementById('gregDate').textContent = formatGregorian(now);
+      if (!prayerData) return;
+      const todayKey = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      if (lastLoadedDate !== todayKey) { loadPrayerTimes(); return; }
+
+      const prayers = [
+        { name: 'Fajr', time: prayerData.fajr }, { name: 'Dhuhr', time: prayerData.dhuhr },
+        { name: 'Asr', time: prayerData.asr }, { name: 'Maghrib', time: prayerData.maghrib }, { name: 'Isha', time: prayerData.isha }
+      ];
+      let next = null;
+      for (const p of prayers) { const dt = parseTimeToDate(now, p.time); if (now < dt) { next = { name: p.name, dt }; break; } }
+      if (!next) { const tom = new Date(now.getTime() + 86400000); next = { name: 'Fajr', dt: parseTimeToDate(tom, prayerData.fajr) }; }
+
+      const localName = T[lang].prayers[next.name] || next.name;
+      document.getElementById('nextPrayer').textContent = localName;
+
+      const diff = Math.max(0, next.dt - now);
+      const hrs = Math.floor(diff / 3600000), mins = Math.floor((diff % 3600000) / 60000), secs = Math.floor((diff % 60000) / 1000);
+      document.getElementById('countdown').textContent = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+
+      // Highlight current prayer row
+      document.querySelectorAll('.prayer-list .label').forEach(el => el.classList.remove('current-prayer'));
+      document.querySelectorAll('.prayer-list .time').forEach(el => el.classList.remove('current-time'));
+    }
+
+    /* ── INIT ── */
+    async function init() {
+      applyLang(); renderEvents(); showQuran(); showHadith(); showReminder();
+      await loadPrayerTimes(); updateCountdown();
+
+      setInterval(updateCountdown, 1000);
+      setInterval(loadPrayerTimes, 3600000);
+
+      // Quran rotates every 20s, Hadith every 16s, Reminder every 22s
+      setInterval(showQuran, 20000);
+      setInterval(showHadith, 16000);
+      setInterval(showReminder, 22000);
+
+      // Language auto-rotates every 12 seconds
+      setInterval(() => {
+        toggleLang();
+        // also refresh content in new language
+        showQuran(); showHadith(); showReminder();
+        if (prayerData) updateTicker(prayerData);
+      }, 12000);
+    }
+
+    init();
+  </script>
+</body>
+
+</html>
